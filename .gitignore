@@ -1,0 +1,4 @@
+**/.venv
+**/flink*.tar.gz
+**/flink*.tgz
+**/flink-*
