@@ -1,0 +1,30 @@
+name: PyFlink pipeline - Deploy
+run-name: ${{ gitea.actor }} is testing out Gitea Actions 🚀
+on:
+  label:
+    types: [created, edited]
+  push:
+    branches:
+      - main
+      - 'releses/**'
+      - 'features/**'
+      - 'feature/**'
+
+jobs:
+  Checkout-Repository:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Inspecting
+        run: |
+          echo "🎉 The job was automatically triggered by a ${{ gitea.event_name }} event."
+          echo "🐧 This job is now running on a ${{ runner.os }} server hosted by Gitea!"
+          echo "🔎 The name of your branch is ${{ gitea.ref }} and your repository is ${{ gitea.repository }}."
+          echo $(pwd)
+
+      - name: Check out repository
+        run: |
+          echo "Check out repository code ${{ gitea.repository }}"
+          git clone http://${{ secrets.SERVER }}/${{ gitea.repository }}
+          ls
+          cd ${{ gitea.workspace }}
+          ls
