@@ -40,7 +40,7 @@ def main():
 
     # Define the Kafka source
     kafka_source = KafkaSource.builder() \
-        .set_bootstrap_servers('localhost:29092') \
+        .set_bootstrap_servers('kafka-1:19092') \
         .set_topics('transactions') \
         .set_group_id('my_flink_transaction_stream_processing_0') \
         .set_starting_offsets(KafkaOffsetsInitializer.earliest()) \
