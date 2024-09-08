@@ -33,8 +33,8 @@ def main():
     config = Configuration()
     cwd = os.getcwd()
     env = StreamExecutionEnvironment.get_execution_environment(config)
-    env.add_jars(f"file:///{cwd}/connector_jars/flink-sql-connector-kafka-3.2.0-1.19.jar")
-    env.add_jars(f"file:///{cwd}/connector_jars/flink-connector-base-1.19.1.jar")
+    env.add_jars(f"hdfs://hdfs-master:9000/flink_jars/flink-sql-connector-kafka-3.2.0-1.19.jar")
+    env.add_jars(f"hdfs://hdfs-master:9000/flink_jars/flink-connector-base-1.19.1.jar")
     env.set_runtime_mode(RuntimeExecutionMode.STREAMING)
     env.set_parallelism(1) # the writing happens only on one machine
 
@@ -71,16 +71,16 @@ def main():
         output_type=Types.STRING()
     )
 
-    # Define the local file sink
-    output_path = './output/transactions/'
-    file_sink = StreamingFileSink \
+    # Define the HDFs file sink
+    output_path = 'hdfs://hdfs-master:9000/flink_stream/transactions/'
+    hdfs_sink = StreamingFileSink \
         .for_row_format(output_path, Encoder.simple_string_encoder()) \
         .with_output_file_config(OutputFileConfig.builder().with_part_prefix('pre').with_part_suffix('.txt').build()) \
         .with_rolling_policy(RollingPolicy.default_rolling_policy()) \
         .build()
 
     # Add the sink to the processed stream
-    string_stream.add_sink(file_sink)
+    string_stream.add_sink(hdfs_sink)
 
     # Print the results to the console (for demonstration purposes)
     processed_stream.print()
